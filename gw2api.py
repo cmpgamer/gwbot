@@ -21,6 +21,7 @@ class Gw2API(object):
 
     def getTokenInfo(self):
         response = requests.get(self.baseURL.format(TOKENINFO), headers=self.header)
+        print(response)
         return response.json()
 
     async def getAccount(self):
@@ -201,6 +202,11 @@ class Gw2API(object):
             response = await resp.json()
         return response
 
+    async def getCustom(self, custom_endpoint):
+        async with self.session.get(self.baseURL.format(custom_endpoint), headers=self.header) as resp:
+            response = await resp.json()
+        return response
+
 async def requestGW2AccountData(userGw2API: Gw2API) -> dict:
     """
     Gathers all of the Guild Wars 2 account data that relies on permissions set when creating the API Key.
@@ -221,6 +227,6 @@ async def requestGW2AccountData(userGw2API: Gw2API) -> dict:
         'bank': await userGw2API.getAccountBank(),
         'inventory': await userGw2API.getAccountInventory(),
         'pvp': await userGw2API.getPvPStats(),
-        'characters': await userGw2API.getCharacters()
+        'characters': await userGw2API.getCustom("/v2/characters?page=0")
     }
     return queries

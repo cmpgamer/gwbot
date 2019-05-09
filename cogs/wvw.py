@@ -15,7 +15,7 @@ class WvW(commands.Cog):
         await ctx.send(file=discord.File('./images/LS3Trinkets.jpg'))
     
     @commands.Cog.listener()
-    async def cog_command_error(self, ctx, error):
+    async def wvw_command_error(self, ctx, error):
         time = datetime.now()
         print('Error in {0.command.qualified_name}: {1}'.format(ctx, error))
     

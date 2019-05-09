@@ -2,6 +2,11 @@ import discord
 from discord.ext import commands
 from datetime import datetime
 
+from cogs.session import getUserAPIKey
+from gw2api import Gw2API
+
+all_perms = ['tradingpost', 'characters', 'pvp', 'progression', 'wallet', 'guilds', 'builds', 'account', 'inventories', 'unlocks']
+
 class Basic(commands.Cog):
 
     def __init__(self, bot):
@@ -54,19 +59,36 @@ class Basic(commands.Cog):
         time = datetime.now()
         print('Error in {0.command.qualified_name}: {1}'.format(ctx, error))
 
-    # @commands.Cog.listener()
-    # async def on_member_update(self, before, after):
-    #     print('we got here')
-    #     if before is not None and after is not None:
-    #         if after.activity.name == "Guild Wars 2":
-    #             # Grab initial data from GW2 API
-    #             pass
-    #
-    #         if before.activity.name == "Guild Wars 2":
-    #             pass
+    @commands.command(
+       name="permissions",
+       description="Outputs a list of all permissions the user has.",
+       aliases=['perms']
+    )
+    async def getPermissions(self, ctx):
+        discord_user_id = ctx.message.author.id
+        api_key = await getUserAPIKey(discord_user_id)
+        if api_key:
+            # Create an instance of the Gw2API object
+            gw2UserAPIInstance = Gw2API(api_key)
+
+            em = discord.Embed()
+            for perm in all_perms:
+
+                if perm in gw2UserAPIInstance.permissions:
+                    val = ":white_check_mark:"
+                else:
+                    val = ":x:"
+                perm = perm.capitalize()
+                em.add_field(name=perm, value=val, inline=True)
+
+
+            await ctx.send(embed=em)
+        else:
+            await ctx.send("You do not have an API Key stored ")
 
 def setup(bot):
     """
     Adds the Basic commands to the bot
     """
+    print("I GET HERE")
     bot.add_cog(Basic(bot))

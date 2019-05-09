@@ -24,6 +24,7 @@ class Api(commands.Cog):
             try:
                 cur = connection.cursor()
                 cur.execute("INSERT INTO Gw2ApiKeys VALUES (%s, %s)", (discord_user_id, key))
+                await ctx.send("Adding new key to be tracked.")
                 connection.commit()
             except Exception as e:
                 print(e)
@@ -31,8 +32,10 @@ class Api(commands.Cog):
             try:
                 cur = connection.cursor()
                 cur.execute("UPDATE Gw2ApiKeys SET api_key = %s WHERE id = %s", (key, discord_user_id))
+                await ctx.send("Key already stored. Updating old API key with new key.")
                 connection.commit()
             except Exception as e:
+                await ctx.send("There was an error storing your API key. Please try again later.")
                 print(e)
         connection.close()
     

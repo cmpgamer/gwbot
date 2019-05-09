@@ -14,7 +14,6 @@ class Userinfo(commands.Cog):
     @commands.group(invoke_without_command=True, pass_context=True, aliases=['ui', 'userinfo'])
     async def user(self, ctx, name=""):
         """Get user info."""
-        print('ctx.invoked_subcommand', ctx.invoked_subcommand)
         if ctx.invoked_subcommand is None:
             pre = cmd_prefix_len()
             if name:
@@ -40,7 +39,6 @@ class Userinfo(commands.Cog):
                 if role == "@everyone":
                     role = "N/A"
                 voice_state = user.voice
-                print("voice_state is {}".format(voice_state))
             if embed_perms(ctx.message):
                 
                 time = ctx.message.created_at.strftime('%m/%d/%Y %H:%M:%S')
@@ -56,7 +54,7 @@ class Userinfo(commands.Cog):
                 if isinstance(user, discord.Member):
                     em.add_field(name='Join Date', value=user.joined_at.__format__('%A, %d. %B %Y @ %H:%M:%S'))
                 em.set_thumbnail(url=avi)
-                em.set_author(name=user, icon_url='https://i.imgur.com/RHagTDg.png')
+                em.set_author(name=user, icon_url=user.avatar_url)
                 await ctx.send(embed=em)
             else:
                 if isinstance(user, discord.Member):
