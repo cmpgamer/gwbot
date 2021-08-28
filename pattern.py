@@ -10,3 +10,5 @@ revenant = re.compile('rev(enant)?', re.IGNORECASE)
 elementalist = re.compile('ele(mentalist)?', re.IGNORECASE)
 mesmer = re.compile('mes(mer)?', re.IGNORECASE)
 engineer = re.compile('engi(neer)?', re.IGNORECASE)
+
+
